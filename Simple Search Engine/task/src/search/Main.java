@@ -1,22 +1,40 @@
 package search;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-    public static List<String> getPeople(Scanner scanner) {
-        System.out.println("Enter the number of people:");
-        int n = Integer.parseInt(scanner.nextLine());
-        System.out.println("Enter all people:");
+    public static List<String> getPeople(String filepath) {
+
         List<String> people = new ArrayList<>();
-        while (n--> 0) {
-            people.add(scanner.nextLine());
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                people.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.println();
         return people;
+    }
+    
+    public static Map<String, List<Integer>> getInvertedIndex(List<String> people) {
+        Map<String, List<Integer>> invertedIndex = new HashMap<>();
+        for (int i = 0; i < people.size(); i++) {
+            String[] items = people.get(i).split(" ");
+            for (String item : items) {
+                item = item.toLowerCase();
+                if (invertedIndex.containsKey(item)) {
+                    invertedIndex.get(item).add(i);
+                } else {
+                    List<Integer> list = new ArrayList<>();
+                    list.add(i);
+                    invertedIndex.put(item, list);
+                }
+            }
+        }
+        return invertedIndex;
     }
 
     public static int displayMenu(Scanner scanner) {
@@ -30,8 +48,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        String filepath = args[1];
+        List<String> people = getPeople(filepath);
+        var invertedIndex = getInvertedIndex(people);
+        //invertedIndex.forEach((k, v) -> System.out.println(k + " : " + v));
         Scanner scanner = new Scanner(System.in);
-        var people = getPeople(scanner);
         int option = -1;
         while (option != 0) {
             option = displayMenu(scanner);
@@ -39,7 +60,7 @@ public class Main {
                 case 0: System.out.println("Bye!"); break;
                 case 1: {
                     System.out.println("Enter a name or email to search all suitable people.");
-                    getInfo(scanner.nextLine(), people);
+                    getInfo(scanner.nextLine(), people, invertedIndex);
                     break;
                 }
                 case 2: {
@@ -54,20 +75,18 @@ public class Main {
         }
     }
 
-    private static void getInfo(String target, List<String> people) {
-        boolean found = false;
-        for (var person : people) {
-            if (person.toLowerCase().contains(target.trim().toLowerCase())) {
-                if (!found)
-                    System.out.println("Found people:");
-                found = true;
-                System.out.println(person);
+    private static void getInfo(String target, List<String> people, Map<String, List<Integer>> invertedIndex) {
+        target = target.trim().toLowerCase();
+        if (invertedIndex.containsKey(target)) {
+            System.out.println("Found people:");
+            List<Integer> indices = invertedIndex.get(target);
+
+            for (int i : indices) {
+                System.out.println(people.get(i));
             }
-        }
-        if (!found) {
-            System.out.println("No matching people found.\n");
-        } else {
             System.out.println();
+        } else {
+            System.out.println("No matching people found.\n");
         }
     }
 }
