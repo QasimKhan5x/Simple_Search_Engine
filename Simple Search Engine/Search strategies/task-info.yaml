@@ -336,6 +336,25 @@ files:
     Myrtle Medina
     Erick Burgess
   learner_created: true
+- name: src/search/SearchingStrategy.java
+  visible: true
+  learner_created: true
+- name: src/search/AllStrategy.java
+  visible: true
+  learner_created: true
+- name: src/search/AnyStrategy.java
+  visible: true
+  learner_created: true
+- name: src/search/NoneStrategy.java
+  visible: true
+  learner_created: true
+- name: src/search/SearchEngine.java
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/66/stages/359/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations! Continue on <a href="https://hyperskill.org/projects/66/stages/359/implement">JetBrains
+    Academy</a>
+  time: Sun, 13 Dec 2020 07:37:16 UTC
 record: -1

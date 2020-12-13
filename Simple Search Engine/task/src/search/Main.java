@@ -51,16 +51,26 @@ public class Main {
         String filepath = args[1];
         List<String> people = getPeople(filepath);
         var invertedIndex = getInvertedIndex(people);
-        //invertedIndex.forEach((k, v) -> System.out.println(k + " : " + v));
+        SearchEngine allEngine = new SearchEngine(new AllStrategy(people, invertedIndex));
+        SearchEngine anyEngine = new SearchEngine(new AnyStrategy(people, invertedIndex));
+        SearchEngine noneEngine = new SearchEngine(new NoneStrategy(people, invertedIndex));
         Scanner scanner = new Scanner(System.in);
+
         int option = -1;
         while (option != 0) {
             option = displayMenu(scanner);
             switch (option) {
                 case 0: System.out.println("Bye!"); break;
                 case 1: {
+                    System.out.println("Select a matching strategy: ALL, ANY, NONE");
+                    String strategy = scanner.nextLine();
                     System.out.println("Enter a name or email to search all suitable people.");
-                    getInfo(scanner.nextLine(), people, invertedIndex);
+                    String query = scanner.nextLine();
+                    switch (strategy) {
+                        case "ALL": allEngine.search(query); break;
+                        case "ANY": anyEngine.search(query); break;
+                        case "NONE": noneEngine.search(query); break;
+                    }
                     break;
                 }
                 case 2: {
