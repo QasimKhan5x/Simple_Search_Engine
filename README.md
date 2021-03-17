@@ -1,6 +1,6 @@
 # Simple Search Engine
 
-A general purpose search engine that can parse a `.txt` file to add data and allow users to enter queries to find people who satisfy that query.
+A general purpose search engine that can parse a `.txt` file to add data and allow users to enter queries to find people who satisfy that query by using an inverted index.
 
 ## Use
 
